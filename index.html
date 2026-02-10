@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JCore Manager - Java Console App</title>
+    <style>
+        /* CSS Reset & Variables */
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent: #38bdf8;
+            --accent-gradient: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+            --border: #334155;
+            --code-bg: #0f172a;
+            --success: #22c55e;
+            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Header / Hero */
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding-top: 40px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin: 0 0 16px 0;
+            letter-spacing: -0.02em;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Terminal Window Mockup */
+        .terminal-window {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            margin: 40px 0;
+            font-family: var(--font-mono);
+        }
+
+        .terminal-header {
+            background: #1e293b;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 8px;
+            margin-right: 16px;
+        }
+
+        .control {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .control.red { background: #ef4444; }
+        .control.yellow { background: #f59e0b; }
+        .control.green { background: #22c55e; }
+
+        .terminal-title {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            flex: 1;
+            text-align: center;
+            margin-right: 50px; /* balance controls */
+        }
+
+        .terminal-body {
+            padding: 24px;
+            color: #e2e8f0;
+            font-size: 0.9rem;
+        }
+
+        .command-line {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            background: rgba(0,0,0,0.3);
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+
+        .prompt {
+            color: var(--accent);
+            margin-right: 12px;
+            user-select: none;
+        }
+
+        .cmd {
+            flex: 1;
+            color: #fff;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+            margin-left: 8px;
+        }
+
+        .copy-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(56, 189, 248, 0.1);
+        }
+
+        .output {
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .output span.green { color: var(--success); }
+        .output span.blue { color: var(--accent); }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 60px;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: transform 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+        }
+
+        .feature-icon {
+            font-size: 24px;
+            margin-bottom: 16px;
+            display: inline-block;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+        }
+
+        .feature-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .feature-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Requirements Section */
+        .requirements-section {
+            margin-top: 60px;
+            padding: 40px;
+            background: rgba(30, 41, 59, 0.5); /* slightly transparent bg-secondary */
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .req-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .req-header h2 {
+            font-size: 1.8rem;
+            color: #fff;
+            margin: 0 0 8px 0;
+        }
+
+        .req-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .req-card {
+            background: var(--bg-primary);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+
+        .req-card:hover {
+            border-color: var(--accent);
+        }
+
+        .req-card strong {
+            display: block;
+            color: var(--accent);
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .req-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        /* Tech Stack */
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 60px;
+            flex-wrap: wrap;
+        }
+
+        .tech-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="badge">Portfolio Project</div>
+            <h1>JCore Manager</h1>
+            <p class="subtitle">Um sistema robusto de gerenciamento de tarefas em Java com arquitetura limpa e persistência JSON.</p>
+        </header>
+
+        <div class="terminal-window">
+            <div class="terminal-header">
+                <div class="window-controls">
+                    <div class="control red"></div>
+                    <div class="control yellow"></div>
+                    <div class="control green"></div>
+                </div>
+                <div class="terminal-title">bash — 80x24</div>
+            </div>
+            <div class="terminal-body">
+                <div class="command-line">
+                    <span class="prompt">$</span>
+                    <code class="cmd" id="cmd-text">mvn clean compile exec:java -Dexec.mainClass="com.jcoremanager.Main"</code>
+                    <button class="copy-btn" onclick="copyCommand()">Copiar</button>
+                </div>
+                <div class="output">
+                    [INFO] Scanning for projects...<br>
+                    [INFO] Building jcore-manager 1.0-SNAPSHOT<br>
+                    [INFO] ...<br>
+                    <br>
+                    <span class="blue">=== Bem-vindo ao JCore Manager ===</span><br>
+                    -------------------------<br>
+                    1. Nova Tarefa<br>
+                    2. Listar Tarefas<br>
+                    3. Atualizar Tarefa<br>
+                    4. Remover Tarefa<br>
+                    5. Concluir Tarefa<br>
+                    6. Sair<br>
+                    Escolha uma opção: <span class="green">_</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🏗️</div>
+                <div class="feature-title">Arquitetura MVC</div>
+                <div class="feature-desc">Separação clara de responsabilidades entre Model, View (Console), Controller e Services.</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💾</div>
+                <div class="feature-title">Persistência JSON</div>
+                <div class="feature-desc">Seus dados são salvos automaticamente utilizando a biblioteca Gson, garantindo permanência.</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <div class="feature-title">Gerenciamento Completo</div>
+                <div class="feature-desc">CRUD completo com suporte a prioridades (Baixa, Média, Alta) e status de conclusão.</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">☕</div>
+                <div class="feature-title">Java Moderno</div>
+                <div class="feature-desc">Utilização de recursos como Streams, Lambdas, Optional e Java Time API (Java 17+).</div>
+            </div>
+        </div>
+
+        <div class="requirements-section">
+            <div class="req-header">
+                <h2>🛠️ Ferramentas Necessárias</h2>
+                <p class="subtitle" style="font-size: 1rem; margin-top: 0;">O que você precisa ter instalado para abrir e rodar este projeto:</p>
+            </div>
+            <div class="req-list">
+                <div class="req-card">
+                    <strong>Java JDK 17+</strong>
+                    <p>O Kit de Desenvolvimento Java é essencial para compilar o código fonte.</p>
+                </div>
+                <div class="req-card">
+                    <strong>Apache Maven</strong>
+                    <p>Ferramenta de build que gerencia a dependência 'Gson' e automatiza a execução.</p>
+                </div>
+                <div class="req-card">
+                    <strong>IDE (Opcional)</strong>
+                    <p>IntelliJ IDEA, Eclipse ou VS Code são recomendados para explorar o código.</p>
+                </div>
+                <div class="req-card">
+                    <strong>Terminal / CMD</strong>
+                    <p>A aplicação roda em linha de comando (PowerShell, Bash ou Prompt).</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="tech-stack">
+            <div class="tech-item">☕ Java 17</div>
+            <div class="tech-item">📦 Maven</div>
+            <div class="tech-item">📄 Gson</div>
+            <div class="tech-item">🏛️ Clean Code</div>
+        </div>
+    </div>
+
+    <script>
+        function copyCommand() {
+            const cmdText = document.getElementById('cmd-text').innerText;
+            navigator.clipboard.writeText(cmdText).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalText = btn.innerText;
+                btn.innerText = 'Copiado!';
+                btn.style.borderColor = 'var(--success)';
+                btn.style.color = 'var(--success)';
+                
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.borderColor = '';
+                    btn.style.color = '';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

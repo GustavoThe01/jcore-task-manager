@@ -1,0 +1,5 @@
+{
+  "name": "JCore Manager",
+  "description": "Sistema de gerenciamento de tarefas em Java (Console Application) com persistência em JSON.",
+  "requestFramePermissions": []
+}
