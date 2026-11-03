@@ -1,97 +1,271 @@
-# JCore Manager
+<div align="center">
 
-> **Status do Projeto:** 🚀 Concluído
+<img src="docs/assets/banner.svg" alt="JCore — gerenciador de tarefas em Java puro" width="100%" />
 
-## 📝 Sobre o Projeto
+# ❖ JCore
+### Java puro, do menu ao arquivo
 
-O **JCore Manager** é uma aplicação robusta de gerenciamento de tarefas executada via console (CLI), desenvolvida em **Java Puro**.
+**Gerenciador de tarefas em linha de comando, escrito em Java 17 sem frameworks.**
+Menu interativo no terminal, camadas separadas (controller, service, repository),<br/>
+persistência em JSON com Gson e datas tratadas com `LocalDateTime`.
 
-Este projeto foi criado com o objetivo de compor um portfólio profissional, demonstrando competências avançadas em engenharia de software, arquitetura limpa e manipulação de dados sem a dependência de frameworks pesados.
+![Java](https://img.shields.io/badge/Java-17-ED8B00?style=flat-square&logo=openjdk&logoColor=white)
+![Maven](https://img.shields.io/badge/Maven-build-C71A36?style=flat-square&logo=apachemaven&logoColor=white)
+![Gson](https://img.shields.io/badge/Gson-2.10-4285F4?style=flat-square)
+![CLI](https://img.shields.io/badge/interface-CLI-111827?style=flat-square&logo=gnubash&logoColor=white)
+![Status](https://img.shields.io/badge/status-concluído-15803d?style=flat-square)
+![Testes](https://img.shields.io/badge/testes-pendentes-6b7280?style=flat-square)
 
-### 🎯 Função e Objetivo
-O sistema serve para gerenciar o ciclo de vida de tarefas pessoais ou profissionais. Ele permite que o usuário registre atividades, defina prioridades, acompanhe o status de conclusão e mantenha um histórico persistente dos seus dados.
-
-Diferente de scripts simples, o JCore Manager implementa uma **Arquitetura em Camadas** profissional, simulando como grandes sistemas corporativos são estruturados internamente.
-
----
-
-## 🛠️ Tecnologias e Ferramentas
-
-O projeto utiliza uma stack moderna e focada na robustez do Java:
-
-*   **Linguagem:** [Java 17+](https://www.oracle.com/java/)
-    *   Uso de *Switch Expressions*, *Streams API*, *Lambdas* e *Optional*.
-*   **Build System:** [Apache Maven](https://maven.apache.org/)
-    *   Gerenciamento de dependências e ciclo de vida de build.
-*   **Persistência de Dados:** JSON
-    *   Os dados não são perdidos ao fechar o programa.
-*   **Biblioteca Externa:** [Google Gson](https://github.com/google/gson)
-    *   Utilizada para serialização (Objeto -> JSON) e desserialização (JSON -> Objeto).
-*   **IDE Recomendada:** IntelliJ IDEA, Eclipse ou VS Code.
+</div>
 
 ---
 
-## 🏗️ Arquitetura do Sistema
+## 👨‍💻 Autor
 
-O código segue estritamente o padrão de separação de responsabilidades (SoC):
+<table>
+  <tr>
+    <td width="62%">
 
-1.  **Model (`com.jcoremanager.model`)**
-    *   Representa os objetos de domínio (`Task`, `Priority`).
-    *   Regras de encapsulamento e formatação de dados.
-2.  **Repository (`com.jcoremanager.repository`)**
-    *   Camada de acesso a dados. Abstrai a leitura/escrita no arquivo `tasks.json`.
-    *   Implementa o padrão *Repository Pattern*.
-3.  **Service (`com.jcoremanager.service`)**
-    *   Contém as regras de negócio.
-    *   Validações (ex: "Título não pode ser vazio").
-    *   Lógica de datas (ex: "Data de conclusão é definida automaticamente ao finalizar tarefa").
-4.  **Controller (`com.jcoremanager.controller`)**
-    *   Gerencia a interação com o usuário.
-    *   Exibe menus e captura entradas do teclado.
-    *   Tratamento de erros de entrada (UX no Console).
+Eu sou o **Gustavo Osterno Thé**, e o **JCore** é um dos projetos do meu portfólio público. Idealizei, desenvolvi e mantenho este repositório.
+
+Antes de usar qualquer framework, quis provar que sei organizar um programa Java **só com a linguagem**: separar responsabilidades em camadas, persistir dados em arquivo e tratar entrada do usuário com segurança. É a base que depois aprofundo, com design patterns, JDBC e testes, no [Nidavellir](https://github.com/GustavoThe01/nidavellir-inventory).
+
+    </td>
+    <td width="38%">
+
+| | |
+|---|---|
+| 🌐 Site | [site-gustavothe-dev.web.app](https://site-gustavothe-dev.web.app/) |
+| 💼 LinkedIn | [gustavoosterno](https://www.linkedin.com/in/gustavoosterno/) |
+| 🐙 GitHub | [@GustavoThe01](https://github.com/GustavoThe01) |
+| 📸 Instagram | [@gustavo.osterno](https://www.instagram.com/gustavo.osterno) |
+
+    </td>
+  </tr>
+</table>
 
 ---
 
-## 🚀 Como Executar o Projeto
+## 📑 Sumário
 
-### Pré-requisitos
-*   Java JDK 17 ou superior instalado.
-*   Maven instalado (opcional, mas recomendado).
+- [Em números](#-em-números)
+- [A origem do nome](#-a-origem-do-nome)
+- [O que o sistema faz](#-o-que-o-sistema-faz)
+- [Menu do terminal](#-menu-do-terminal)
+- [Arquitetura](#️-arquitetura)
+- [Como uma tarefa é salva](#-como-uma-tarefa-é-salva)
+- [Competências demonstradas](#-competências-demonstradas)
+- [Metodologias e decisões](#-metodologias-e-decisões)
+- [Roadmap](#️-roadmap)
+- [Como rodar](#-como-rodar)
+- [Testes](#-testes)
+- [Estrutura do projeto](#-estrutura-do-projeto)
+- [O que ainda falta](#-o-que-ainda-falta)
+- [Projetos relacionados](#-projetos-relacionados)
 
-### Passo a Passo
+---
 
-1.  **Clone o repositório** ou baixe os arquivos.
-2.  **Abra o terminal** na pasta raiz do projeto.
-3.  **Compile e Execute** usando o Maven:
+## 📊 Em números
 
-```bash
-mvn clean compile exec:java -Dexec.mainClass="com.jcoremanager.Main"
+<div align="center">
+
+| ☕ Linguagem | 🧱 Design | 💾 Dados | 🗓️ Processo |
+|:---:|:---:|:---:|:---:|
+| **Java 17**, zero frameworks | **4** camadas (controller, service, repository, model) | arquivo **`tasks.json`** | **2** commits · fev/2026 |
+| switch expressions e lambdas | repositório por **interface** | Gson com adaptador de `LocalDateTime` | build com Maven |
+| **1** dependência (Gson) | **5** operações no menu | **3** níveis de prioridade | versão **concluída** |
+
+<sub>Números do estado atual do repositório. O que vem a seguir está em <a href="#-o-que-ainda-falta">O que ainda falta</a>.</sub>
+
+</div>
+
+---
+
+## ❖ A origem do nome
+
+> *Todo sistema grande começa com um núcleo pequeno que funciona.*
+
+**J** de Java e **Core** de núcleo. O JCore é exatamente isso: o essencial de um gerenciador de tarefas, sem nada que a linguagem não ofereça por conta própria.
+
+---
+
+## ✨ O que o sistema faz
+
+| Recurso | O que resolve |
+|---|---|
+| ➕ **Criar** | Nova tarefa com título, descrição e prioridade |
+| 📋 **Listar** | Todas as tarefas, com status e datas |
+| ✏️ **Atualizar** | Altera título, descrição e prioridade |
+| ✅ **Concluir** | Marca a tarefa como feita e registra a data de conclusão |
+| 🗑️ **Remover** | Exclui a tarefa |
+| 💾 **Persistir** | Salva tudo em `tasks.json`, que sobrevive ao fechamento do programa |
+
+---
+
+## 🌐 Menu do terminal
+
+```text
+1. Nova Tarefa
+2. Listar Tarefas
+3. Atualizar Tarefa
+4. Remover Tarefa
+5. Concluir Tarefa
+6. Sair
 ```
 
-Se preferir compilar manualmente sem Maven:
-```bash
-# Compilar
-javac -cp "lib/gson-2.10.1.jar" -d bin src/main/java/com/jcoremanager/**/*.java src/main/java/com/jcoremanager/*.java
+Prioridades aceitas: `BAIXA`, `MEDIA`, `ALTA` (um `enum` impede valores soltos como "mais ou menos").
 
-# Executar (Linux/Mac)
-java -cp "bin:lib/gson-2.10.1.jar" com.jcoremanager.Main
+---
 
-# Executar (Windows)
-java -cp "bin;lib/gson-2.10.1.jar" com.jcoremanager.Main
+## 🏛️ Arquitetura
+
+O controller só conversa com o usuário; as regras ficam no serviço; o serviço depende de uma **interface** de repositório, não do arquivo JSON.
+
+```mermaid
+flowchart TB
+    MAIN["Main"] --> CTRL["TaskController<br/>menu e entrada do terminal"]
+    CTRL --> SVC["TaskService<br/>regras de negócio"]
+    SVC --> REPO["TaskRepository<br/>(interface)"]
+    JSON["JsonTaskRepository<br/>Gson + LocalDateTimeAdapter"] -. implementa .-> REPO
+    JSON --> FILE[("tasks.json")]
+    MODEL["Task · Priority"] -.-> SVC
 ```
 
 ---
 
-## ✨ Funcionalidades Principais
+## 🔄 Como uma tarefa é salva
 
-*   ✅ **Criar Tarefa:** Com validação de campos obrigatórios.
-*   📋 **Listar Tarefas:** Visualização formatada com ID, Status e Datas.
-*   ✏️ **Atualizar:** Edição parcial (pressione Enter para manter o valor atual).
-*   🗑️ **Remover:** Exclusão física do registro.
-*   ✅ **Concluir:** Marcação de status e registro automático da data/hora de término.
-*   🚨 **Prioridades:** Classificação via Enum (BAIXA, MEDIA, ALTA).
-*   💾 **Auto-Save:** Tudo é salvo automaticamente em `tasks.json`.
+```mermaid
+sequenceDiagram
+    actor U as Usuário
+    participant C as TaskController
+    participant S as TaskService
+    participant R as JsonTaskRepository
+    participant F as tasks.json
+
+    U->>C: opção 1 + título, descrição, prioridade
+    C->>S: createTask(...)
+    S->>S: new Task (id e data de criação)
+    S->>R: save(task)
+    R->>F: grava a lista em JSON
+    C-->>U: "Tarefa criada"
+```
 
 ---
 
-Desenvolvido para demonstração de proficiência técnica em Java.
+## 🧠 Competências demonstradas
+
+| Área | Conceitos |
+|---|---|
+| **Java moderno** | Switch expressions, lambdas, `Optional`, `LocalDateTime` |
+| **POO** | Encapsulamento, enum para domínio fechado, separação de responsabilidades |
+| **Arquitetura** | Camadas, inversão de dependência com interface de repositório |
+| **Persistência** | Serialização e desserialização JSON com Gson e `TypeAdapter` |
+| **CLI** | Menu interativo, leitura e validação de entrada com `Scanner` |
+| **Build** | Projeto Maven com dependência gerenciada |
+
+---
+
+## 🧭 Metodologias e decisões
+
+- **Interface antes da implementação**: trocar o JSON por um banco exige só um novo `TaskRepository`.
+- **Enum de prioridade** em vez de texto livre, para que o domínio só aceite valores válidos.
+- **Sem framework de propósito**: o objetivo é mostrar o que a linguagem faz sozinha.
+
+---
+
+## 🗺️ Roadmap
+
+| Fase | Tema | Versão | Progresso |
+|---|---|:---:|---|
+| 1 | CRUD no terminal com persistência em JSON | `v1.0.0` | 🟩🟩🟩🟩🟩 |
+| 2 | Limpeza do repositório, testes com JUnit 5 e CI | `v1.1.0` | ⬜⬜⬜⬜⬜ |
+| 3 | Filtros, busca e relatórios com Streams | `v1.2.0` | ⬜⬜⬜⬜⬜ |
+
+---
+
+## 🚀 Como rodar
+
+**Pré-requisitos:** [JDK 17+](https://adoptium.net/) e [Maven](https://maven.apache.org/).
+
+```bash
+git clone https://github.com/GustavoThe01/jcore-task-manager.git
+```
+
+```bash
+cd jcore-task-manager
+```
+
+```bash
+mvn compile exec:java -Dexec.mainClass=com.jcoremanager.Main
+```
+
+As tarefas ficam salvas em `tasks.json`, na pasta onde o programa foi executado.
+
+---
+
+## 🧪 Testes
+
+Ainda não há testes automatizados neste repositório. O plano:
+
+| Tipo | Ferramenta | Situação |
+|---|---|---|
+| Unitários do `TaskService` (com repositório em memória) | JUnit 5 | ⏳ Planejado |
+| Persistência (`JsonTaskRepository` em pasta temporária) | JUnit 5 | ⏳ Planejado |
+
+---
+
+## 📁 Estrutura do projeto
+
+```
+jcore-task-manager/
+├── src/main/java/com/jcoremanager/
+│   ├── Main.java                     # ✅ ponto de entrada
+│   ├── controller/TaskController.java # ✅ menu do terminal
+│   ├── service/TaskService.java      # ✅ regras de negócio
+│   ├── repository/
+│   │   ├── TaskRepository.java       # ✅ interface
+│   │   └── JsonTaskRepository.java   # ✅ persistência com Gson
+│   ├── model/                        # ✅ Task, Priority
+│   └── util/LocalDateTimeAdapter.java # ✅ datas no JSON
+├── src/main/java/com/taskflow/       # ⚠️ cópia antiga do mesmo código (a remover)
+├── docs/assets/                      # ✅ banner
+├── pom.xml                           # ✅ Java 17 + Gson
+└── index.html · index.tsx · vite.config.ts · package.json  # ⚠️ sobras do template (a remover)
+```
+
+---
+
+## 🧩 O que ainda falta
+
+Mantenho aqui um checklist vivo do que ainda vou incrementar neste repositório.
+
+**Projeto**
+- [x] Criar, listar, atualizar, concluir e remover tarefas
+- [x] Persistência em JSON com datas
+- [ ] Remover o pacote duplicado `com.taskflow` e os arquivos de front-end que sobraram do template
+- [ ] Declarar o `exec-maven-plugin` e o `mainClass` no `pom.xml` (rodar com `mvn exec:java`)
+- [ ] Testes com JUnit 5 e GitHub Actions
+- [ ] Filtros por prioridade e status com Streams
+
+**README**
+- [ ] GIF do menu em uso
+- [ ] Definir e adicionar uma licença (`LICENSE`)
+
+---
+
+## 🔗 Projetos relacionados
+
+| Projeto | Stack | Relação |
+|---|---|---|
+| ⚒ [Nidavellir](https://github.com/GustavoThe01/nidavellir-inventory) | Java 21 | **A evolução deste projeto**: design patterns, JDBC com transações e testes |
+| ◆ [CorePlan](https://github.com/GustavoThe01/coreplan-api) | Spring Boot 3 | O mesmo domínio de tarefas, agora como API REST |
+| ♾ [Moirai](https://github.com/GustavoThe01/moirai-taskflow) | Spring Boot 4 | Tarefas com Arquitetura Hexagonal e segurança |
+| ☑ [ThéTask](https://github.com/GustavoThe01/taskboard-react-ts) | React | Tarefas num quadro Kanban no navegador |
+| ❖ **JCore** | Java 17 | *você está aqui* |
+
+<div align="center">
+
+<sub>Escrito por mim, linha por linha, em Java puro · <a href="https://github.com/GustavoThe01">Gustavo Osterno Thé</a></sub>
+
+</div>
